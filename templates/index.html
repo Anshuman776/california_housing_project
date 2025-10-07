@@ -1,35 +1,156 @@
 <!DOCTYPE html>
-<html >
-
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>ML Prediction API</title>
-  <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>House Price Prediction</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Arimo&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Arimo', sans-serif;
+        }
 
-  
+        body {
+            background: linear-gradient(135deg, #a8edea, #fed6e3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background: #fff;
+            padding: 40px 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            max-width: 450px;
+            width: 100%;
+            text-align: center;
+            transition: 0.3s;
+        }
+
+        h1 {
+            font-family: 'Pacifico', cursive;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        input[type="text"] {
+            padding: 12px 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        input[type="text"]:focus {
+            border-color: #6c63ff;
+            outline: none;
+            box-shadow: 0 0 5px rgba(108, 99, 255, 0.5);
+        }
+
+        button {
+            padding: 15px;
+            margin-top: 15px;
+            border: none;
+            border-radius: 8px;
+            background-color: #6c63ff;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: #574fcf;
+        }
+
+        .result-box {
+            display: none;
+            margin-top: 30px;
+            background: #fff;
+            padding: 30px 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            transition: 0.3s;
+        }
+
+        .result-box.show {
+            display: block;
+        }
+
+        .result-box h2 {
+            font-family: 'Pacifico', cursive;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .price {
+            font-size: 2em;
+            font-weight: bold;
+            color: #6c63ff;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            .price {
+                font-size: 1.7em;
+            }
+        }
+    </style>
 </head>
-
 <body>
- <div class="login">
-	<h1>House Price Prediction</h1>
+    <div class="container">
+        <h1>House Price Prediction</h1>
+        <form id="predictionForm">
+            <input type="text" name="MedInc" placeholder="Median Income (MedInc)" required>
+            <input type="text" name="HouseAge" placeholder="House Age" required>
+            <input type="text" name="AveRooms" placeholder="Average Rooms" required>
+            <input type="text" name="Population" placeholder="Population" required>
+            <input type="text" name="AveOccup" placeholder="Average Occupancy" required>
+            <input type="text" name="Latitude" placeholder="Latitude" required>
+            <button type="submit">Predict</button>
+        </form>
 
-     <!-- Main Input For Receiving Query to our ML -->
-    <form action="{{ url_for('predict_api')}}"method="post">
-      <input type="text" name="MedInc" placeholder="MedInc" required="required" /><br>
-      <input type="text" name="HouseAge" placeholder="HouseAge" required="required" /><br>
-      <input type="text" name="AveRooms" placeholder="AveRooms" required="required" /><br>
-      <input type="text" name="Population" placeholder="Population" required="required" /><br>
-      <input type="text" name="AveOccup" placeholder="AveOccup" required="required" /><br>
-      <input type="text" name="Latitude" placeholder="Latitude" required="required" /><br>
-      <button type="submit" class="btn btn-primary btn-block btn-large">Predict</button>
-    </form>
+        <div class="result-box" id="resultBox">
+            <h2>🏡 Predicted House Price</h2>
+            <div class="price" id="predictedPrice"></div>
+        </div>
+    </div>
 
-   <br>
-   <br>
- </div>
- {{prediction_text}}
+    <script>
+        const form = document.getElementById('predictionForm');
+        const resultBox = document.getElementById('resultBox');
+        const predictedPrice = document.getElementById('predictedPrice');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Get all input values
+            const values = Array.from(form.elements)
+                                .filter(el => el.tagName === 'INPUT')
+                                .map(el => parseFloat(el.value));
+
+            // Simple example prediction logic (replace with actual API call)
+            const prediction = values.reduce((a, b) => a + b, 0) * 10000;
+
+            // Display the result
+            predictedPrice.textContent = `$${prediction.toLocaleString()}`;
+            resultBox.classList.add('show');
+        });
+    </script>
 </body>
 </html>
